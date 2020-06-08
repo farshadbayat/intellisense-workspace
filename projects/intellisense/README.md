@@ -32,6 +32,7 @@ export class AppModule { }
 ---
 
 <br>
+
 ## Angular Intellisense
 # Configuration
 ```javascript
@@ -45,6 +46,7 @@ public state: IntellisenseState = {
 ---
 
 <br>
+
 ## HTML Tag
 ```html
 <div class="form-control" intellisense [editable]='true' [menuRef]="menu" [state]='state'
