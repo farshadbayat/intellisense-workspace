@@ -1,0 +1,23 @@
+{
+  "name": "intellisense",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^9.1.9",
+    "@angular/core": "^9.1.9"
+  },
+  "dependencies": {
+    "tslib": "^1.10.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://www.youtube.com/watch?v=rTsz09zRuTU"
+  },
+  "keywords": [
+    "intellisense",
+    "autocomplate menu",
+    "smart tag",
+    "editor"
+  ],
+  "author": "farshad bayat",
+  "license": "MIT"
+}

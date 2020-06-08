@@ -1,0 +1,171 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "intellisense-demo": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/intellisense-demo",
+      "sourceRoot": "projects/intellisense-demo/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/intellisense-demo",
+            "index": "projects/intellisense-demo/src/index.html",
+            "main": "projects/intellisense-demo/src/main.ts",
+            "polyfills": "projects/intellisense-demo/src/polyfills.ts",
+            "tsConfig": "projects/intellisense-demo/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "projects/intellisense-demo/src/favicon.ico",
+              "projects/intellisense-demo/src/assets"
+            ],
+            "styles": [
+              "projects/intellisense-demo/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/intellisense-demo/src/environments/environment.ts",
+                  "with": "projects/intellisense-demo/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "intellisense-demo:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "intellisense-demo:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "intellisense-demo:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/intellisense-demo/src/test.ts",
+            "polyfills": "projects/intellisense-demo/src/polyfills.ts",
+            "tsConfig": "projects/intellisense-demo/tsconfig.spec.json",
+            "karmaConfig": "projects/intellisense-demo/karma.conf.js",
+            "assets": [
+              "projects/intellisense-demo/src/favicon.ico",
+              "projects/intellisense-demo/src/assets"
+            ],
+            "styles": [
+              "projects/intellisense-demo/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/intellisense-demo/tsconfig.app.json",
+              "projects/intellisense-demo/tsconfig.spec.json",
+              "projects/intellisense-demo/e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/intellisense-demo/e2e/protractor.conf.js",
+            "devServerTarget": "intellisense-demo:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "intellisense-demo:serve:production"
+            }
+          }
+        }
+      }
+    },
+    "intellisense": {
+      "projectType": "library",
+      "root": "projects/intellisense",
+      "sourceRoot": "projects/intellisense/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/intellisense/tsconfig.lib.json",
+            "project": "projects/intellisense/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/intellisense/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/intellisense/src/test.ts",
+            "tsConfig": "projects/intellisense/tsconfig.spec.json",
+            "karmaConfig": "projects/intellisense/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/intellisense/tsconfig.lib.json",
+              "projects/intellisense/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }},
+  "cli": {
+    "analytics": "ec1c30d4-37c8-4ebc-a877-49ea915e01fa"
+  },
+  "defaultProject": "intellisense-lib"
+}

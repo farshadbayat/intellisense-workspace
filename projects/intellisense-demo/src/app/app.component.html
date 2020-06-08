@@ -1,0 +1,18 @@
+<div class="form-control" intellisense [editable]='true' [menuRef]="menu" [state]='state'
+    (contentChange)="input_onChangeContent($event)"
+    (eventCapture)="input_onEventChange($event)">
+</div>
+
+<intellisense-menu #menu >
+  <a *ngFor="let item of state.items; let i = index;" [class.select]="i === intellisense?.itemIndex" (click)="menuItem_onClick(menu, i)">
+    {{ item.name || item}}
+  </a>
+</intellisense-menu>
+
+<br>
+
+<h4>html</h4>
+  <div [innerHTML]="htmlOutput | safeHtml"></div>
+<h4>text</h4>
+  {{textOutput}}
+
