@@ -1,24 +1,63 @@
 # Intellisense
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.9.
+angular intellisense menu which can be used in html tags or html editor with customizable option.
+<br>
+Features:
+1.directive: can used evrey tag such as div, html editor.
+2.Ability to customize the menu.
+3.Extract useful information and adequate events.
 
-## Code scaffolding
+## Installation
 
-Run `ng generate component component-name --project intellisense` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project intellisense`.
-> Note: Don't forget to add `--project intellisense` or else it will be added to the default project in your `angular.json` file. 
+> npm i angular-intellisense
 
-## Build
+---
+## Import this module to your angular app
 
-Run `ng build intellisense` to build the project. The build artifacts will be stored in the `dist/` directory.
+```javascript
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    IntellisenseModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
 
-## Publishing
+---
 
-After building your library with `ng build intellisense`, go to the dist folder `cd dist/intellisense` and run `npm publish`.
+<br>
+## Angular Intellisense
+# Configuration
+```javascript
+public state: IntellisenseState = {
+    triggerList: ['@', '.'],
+    items: [{ name : 'Apple',price : 35}, { name : 'Banana',price : 45}, { name : 'Grapes',price : 68}],
+    fieldName: 'name'
+  };
+```
 
-## Running unit tests
+---
 
-Run `ng test intellisense` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+<br>
+## HTML Tag
+```html
+<div class="form-control" intellisense [editable]='true' [menuRef]="menu" [state]='state'
+    (contentChange)="input_onChangeContent($event)"
+    (eventCapture)="input_onEventChange($event)">
+</div>
+```
+## Menu
+```html
+<intellisense-menu #menu >
+  <a *ngFor="let item of state.items; let i = index;" [class.select]="i === intellisense?.itemIndex" (click)="menuItem_onClick(menu, i)">
+    {{ item.name || item}}
+  </a>
+</intellisense-menu>
+```
+---
