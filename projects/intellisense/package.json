@@ -1,6 +1,6 @@
 {
   "name": "intellisense",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "peerDependencies": {
     "@angular/common": "^9.1.9",
     "@angular/core": "^9.1.9"
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://www.youtube.com/watch?v=rTsz09zRuTU"
+    "url": "https://github.com/farshadbayat/intellisense-workspace"
   },
   "keywords": [
     "intellisense",
