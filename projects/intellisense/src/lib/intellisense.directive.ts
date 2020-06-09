@@ -235,7 +235,7 @@ export class IntellisenseDirective implements OnChanges {
       // const mw = (menu.firstChild as HTMLDivElement).clientWidth;
       const x1 = Math.min(offset.offsetLeft - this.editor.element.nativeElement.scrollLeft , this.maxWidth - this.menuRef.width());
       const y1 = offset.offsetTop - this.editor.element.nativeElement.scrollTop  + 25;
-      this.menuRef.location = {x: x1, y: y1};
+      this.menuRef.location({x: x1, y: y1});
     }
   }
 

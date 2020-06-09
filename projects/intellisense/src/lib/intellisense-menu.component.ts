@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, HostBinding, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, HostBinding, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'intellisense-menu',
@@ -23,21 +23,18 @@ import { Component, OnInit, Input, HostBinding, OnChanges, SimpleChanges, ViewCh
     display: block;
   }`]
 })
-export class IntellisenseMenuComponent implements OnChanges {
+export class IntellisenseMenuComponent {
   @ViewChild('menu') menu;
   @Input() visible: boolean;
-  @Input() location: {x: number, y: number};
   @HostBinding('style.left.px') x: number;
   @HostBinding('style.top.px') y: number;
 
   constructor() {
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.location) {
-      this.x = this.location.x;
-      this.y = this.location.y;
-    }
+  public location(value: {x: number, y: number}) {
+    this.x = value.x;
+    this.y = value.y;
   }
 
   public width(): number {
