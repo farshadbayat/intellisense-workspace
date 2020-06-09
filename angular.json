@@ -167,5 +167,5 @@
   "cli": {
     "analytics": "ec1c30d4-37c8-4ebc-a877-49ea915e01fa"
   },
-  "defaultProject": "intellisense-lib"
+  "defaultProject": "intellisense-demo"
 }

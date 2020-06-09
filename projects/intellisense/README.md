@@ -5,11 +5,26 @@ angular intellisense menu which can be used in html tags or html editor with cus
 Features:
 1.directive: can used evrey tag such as div, html editor.
 2.Ability to customize the menu.
-3.Extract useful information and adequate events.
+3.Extract useful information at event raise.
+
+## Events
+
+(contentChange): raise when charater typing in tag.
+Output: { Text: string, Html: string}
+
+(eventCapture): raise when menu open or current word changed.
+Output: 
+```javascript
+export interface EventData {
+  sender: IntellisenseState;
+  data: any;
+  trigger?: string;
+}
+```
 
 ## Installation
 
-> npm i angular-intellisense
+> npm i angular-intellisense --save
 
 ---
 ## Import this module to your angular app

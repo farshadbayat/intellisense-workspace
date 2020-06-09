@@ -8,21 +8,17 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
   selector: '[intellisense]',
 })
 export class IntellisenseDirective {
-  private menu: IntellisenseMenuComponent;
   private maxWidth: number;
   public itemIndex: number;
   @Input()
-  set editable( value: boolean) {
+  public set editable( value: boolean) {
     this.editor.element.nativeElement.contentEditable = value;
   }
   @Output() contentChange = new EventEmitter<any>();
   @Output() eventCapture = new EventEmitter<EventData>();
   @Input() splitterChar = [ String.fromCharCode(160) /* &nbsp; */, ' ', '-' , '+', '\\' , '/' , '[', ']' , '{', '}' , '.' , ','];
   @Input() state?: IntellisenseState = null;
-  @Input()
-  set menuRef(value: IntellisenseMenuComponent) {
-    this.menu = value;
-  }
+  @Input() menuRef: IntellisenseMenuComponent;
   @HostBinding('style') style: SafeStyle;
 
   constructor(public editor: ViewContainerRef, public sanitizer: DomSanitizer) {
@@ -140,12 +136,12 @@ export class IntellisenseDirective {
     this.updateSearchTrigger(true);
     this.itemIndex = 0;
     this.updateLocation();
-    this.menu.visible = true;
+    this.menuRef.visible = true;
   }
 
   closeMenu() {
     this.deleteCaret();
-    this.menu.visible = false;
+    this.menuRef.visible = false;
   }
 
   // Extract Search Text & Current Trigger
@@ -231,12 +227,12 @@ export class IntellisenseDirective {
     // const caret = document.getElementById('c0');
     const caret = this.editor.element.nativeElement.querySelector('#c0');
     // const menu = document.getElementById('menu');
-    if (caret && this.menu) {
+    if (caret && this.menuRef) {
       const offset = this.getTotalOffset(caret);
       // const mw = (menu.firstChild as HTMLDivElement).clientWidth;
-      const x1 = Math.min(offset.offsetLeft - this.editor.element.nativeElement.scrollLeft , this.maxWidth - this.menu.width);
+      const x1 = Math.min(offset.offsetLeft - this.editor.element.nativeElement.scrollLeft , this.maxWidth - this.menuRef.width());
       const y1 = offset.offsetTop - this.editor.element.nativeElement.scrollTop  + 25;
-      this.menu.location = {x: x1, y: y1};
+      this.menuRef.location = {x: x1, y: y1};
     }
   }
 
@@ -359,15 +355,15 @@ export class IntellisenseDirective {
       console.warn('[menuData] field is not exist in tag.');
       return;
     }
-    if (this.menu === null) {
+    if (this.menuRef === null) {
       console.warn('refrence to the menu is not set.');
       return;
     }
     let preventDefualt = false;
-    if (this.menu.visible === true) {
+    if (this.menuRef.visible === true) {
       if (e.type === 'keydown' && e.key === 'Enter') {
         preventDefualt = true;
-        this.item_select(this.menu, this.itemIndex);
+        this.item_select(this.menuRef, this.itemIndex);
       } else if ( e.type === 'keydown' && e.key === 'ArrowDown' && this.itemIndex < this.state.items.length - 1 ) {
         this.itemIndex++;
         preventDefualt = true;

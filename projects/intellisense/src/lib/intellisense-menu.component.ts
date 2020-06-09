@@ -23,24 +23,24 @@ import { Component, OnInit, Input, HostBinding, OnChanges, SimpleChanges, ViewCh
     display: block;
   }`]
 })
-export class IntellisenseMenuComponent {
+export class IntellisenseMenuComponent implements OnChanges {
   @ViewChild('menu') menu;
   @Input() visible: boolean;
-  @Input()
-  set location(value: {x: number, y: number}) {
-    if ( value.x !== null) {
-      this.x = value.x;
-    }
-    if ( value.y !== null) {
-      this.y = value.y;
-    }
-  }
+  @Input() location: {x: number, y: number};
   @HostBinding('style.left.px') x: number;
   @HostBinding('style.top.px') y: number;
+
   constructor() {
   }
 
-  get width(): number {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.location) {
+      this.x = this.location.x;
+      this.y = this.location.y;
+    }
+  }
+
+  public width(): number {
     return Math.max(this.menu.nativeElement.clientWidth, 160);
   }
 
