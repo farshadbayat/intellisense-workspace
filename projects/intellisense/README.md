@@ -3,13 +3,16 @@
 angular intellisense menu which can be used in html tags or html editor with customizable option.
 <br>
 Features:
-1.directive: can used evrey tag such as div, html editor.
+<br>
+1.directive: can be used in evrey tag such as div, html editor.
+<br>
 2.Ability to customize the menu.
+<br>
 3.Extract useful information at event raise.
 
-## Events
+## Events Outputs
 
-(contentChange): raise when charater typing in tag.
+(contentChange): raise when character typing in tag.
 Output: { Text: string, Html: string}
 
 (eventCapture): raise when menu open or current word changed.

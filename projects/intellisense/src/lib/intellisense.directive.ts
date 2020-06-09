@@ -7,22 +7,25 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 @Directive({
   selector: '[intellisense]',
 })
-export class IntellisenseDirective {
+export class IntellisenseDirective implements OnChanges {
   private maxWidth: number;
   public itemIndex: number;
-  @Input()
-  public set editable( value: boolean) {
-    this.editor.element.nativeElement.contentEditable = value;
-  }
   @Output() contentChange = new EventEmitter<any>();
   @Output() eventCapture = new EventEmitter<EventData>();
   @Input() splitterChar = [ String.fromCharCode(160) /* &nbsp; */, ' ', '-' , '+', '\\' , '/' , '[', ']' , '{', '}' , '.' , ','];
   @Input() state?: IntellisenseState = null;
   @Input() menuRef: IntellisenseMenuComponent;
   @HostBinding('style') style: SafeStyle;
+  @Input() editable: boolean;
 
   constructor(public editor: ViewContainerRef, public sanitizer: DomSanitizer) {
     this.inputStyle();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if ( changes.editable ) {
+      this.editor.element.nativeElement.contentEditable = this.editable;
+    }
   }
 
   @HostListener('document:keyup.control.space', ['$event'])
