@@ -34,6 +34,13 @@ export class IntellisenseDirective implements OnChanges {
   @Input() public menuRef: IntellisenseMenuComponent;
   @HostBinding('style') public style: SafeStyle;
   @Input() public editable: boolean;
+  @Input()
+  public get html(): string {
+    return this.editor.element.nativeElement.innerHTML;
+  }
+  public set html(value: string) {
+    this.editor.element.nativeElement.innerHTML = value;
+  }
 
   constructor(public editor: ViewContainerRef, public sanitizer: DomSanitizer) {
     this.inputStyle();
@@ -89,10 +96,6 @@ export class IntellisenseDirective implements OnChanges {
     styles.push('outline: none');
     styles.push('padding: 8px');
     this.style = this.sanitizer.bypassSecurityTrustStyle(styles.join(';'));
-  }
-
-  public setHtml(html: string) {
-    this.editor.element.nativeElement.innerHTML = html;
   }
 
   public item_select(menu: IntellisenseMenuComponent, index: number) {

@@ -50,11 +50,11 @@ export class AppComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     console.log('<b> This is a sample...<\b>');
-    this.intellisense.setHtml(`
+    this.intellisense.html = `
       <h1><strong>Angular Intellisense Auto Complate</strong></h1>
       <p>Hi,</p>
       <p>This menu contains a list of fruits and will be shown by pressing @ and . or CTRL+SPACE.</p>
-    `);
+    `;
   }
 
   input_onChangeContent(e) {
