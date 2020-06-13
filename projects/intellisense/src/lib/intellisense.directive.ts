@@ -91,6 +91,10 @@ export class IntellisenseDirective implements OnChanges {
     this.style = this.sanitizer.bypassSecurityTrustStyle(styles.join(';'));
   }
 
+  public setHtml(html: string) {
+    this.editor.element.nativeElement.innerHTML = html;
+  }
+
   public item_select(menu: IntellisenseMenuComponent, index: number) {
     this.itemIndex = Math.min( this.state.items.length - 1, index);
     this.injectText(this.menuItemContent(this.state.items[this.itemIndex]));

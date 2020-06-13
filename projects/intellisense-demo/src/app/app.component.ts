@@ -1,5 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
-import { IIntellisenseState, IEventData, IntellisenseMenuComponent, IntellisenseDirective } from 'intellisense';
+import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
+import { IIntellisenseState, IEventData, IntellisenseMenuComponent, IntellisenseDirective } from 'projects/intellisense/src/public-api';
+// import { IIntellisenseState, IEventData, IntellisenseMenuComponent, IntellisenseDirective } from 'intellisense'; // import from dist
 
 const IMAGE_URL = 'https://upload.wikimedia.org/wikipedia/commons/thumb';
 @Component({
@@ -7,7 +8,7 @@ const IMAGE_URL = 'https://upload.wikimedia.org/wikipedia/commons/thumb';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   title = 'intellisense-demo';
   textOutput: string;
   htmlOutput: string;
@@ -45,6 +46,15 @@ export class AppComponent {
 
   constructor() {
     this.state.items = this.fruits;
+  }
+
+  ngAfterViewInit(): void {
+    console.log('<b> This is a sample...<\b>');
+    this.intellisense.setHtml(`
+      <h1><strong>Angular Intellisense Auto Complate</strong></h1>
+      <p>Hi,</p>
+      <p>This menu contains a list of fruits and will be shown by pressing @ and . or CTRL+SPACE.</p>
+    `);
   }
 
   input_onChangeContent(e) {
