@@ -34,6 +34,13 @@ export class IntellisenseDirective implements OnChanges {
   @Input() public menuRef: IntellisenseMenuComponent;
   @HostBinding('style') public style: SafeStyle;
   @Input() public editable: boolean;
+  @Input()
+  public get html(): string {
+    return this.editor.element.nativeElement.innerHTML;
+  }
+  public set html(value: string) {
+    this.editor.element.nativeElement.innerHTML = value;
+  }
 
   constructor(public editor: ViewContainerRef, public sanitizer: DomSanitizer) {
     this.inputStyle();
