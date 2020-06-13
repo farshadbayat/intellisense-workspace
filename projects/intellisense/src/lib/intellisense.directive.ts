@@ -53,34 +53,34 @@ export class IntellisenseDirective implements OnChanges {
   }
 
   @HostListener('document:keyup.control.space', ['$event'])
-  private onCtrlSpaceKeyup(event: KeyboardEvent) {
+  public onCtrlSpaceKeyup(event: KeyboardEvent) {
     this.initCaret();
     this.showMenu();
   }
 
   @HostListener('input', ['$event'])
-  private onInput(event: any) {
+  public onInput(event: any) {
     const e = { Text: this.editor.element.nativeElement.textContent, Html: this.editor.element.nativeElement.innerHTML};
     this.contentChange.emit(e);
   }
 
   @HostListener('keydown', ['$event'])
-  private onKeyDown(event: KeyboardEvent) {
+  public onKeyDown(event: KeyboardEvent) {
     this.processEvent(event);
   }
 
   @HostListener('keyup', ['$event'])
-  private onKeyUp(event: KeyboardEvent) {
+  public onKeyUp(event: KeyboardEvent) {
     this.processEvent(event);
   }
 
   @HostListener('keypress', ['$event'])
-  private onKeyPress(event: KeyboardEvent) {
+  public onKeyPress(event: KeyboardEvent) {
     this.processEvent(event);
   }
 
   @HostListener('click', ['$event'])
-  private onClick(event: any) {
+  public onClick(event: any) {
     this.closeMenu();
   }
 
