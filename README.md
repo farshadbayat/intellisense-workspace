@@ -2,6 +2,21 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.26.
 
+# How was this project Created?(Create workspace with library)
+ng new intellisense-workspace --create-application=false
+cd intellisense-workspace
+ng generate library intellisense
+ng generate application intellisense-demo
+
+## For angular 9
+ng build intellisense --prod
+
+## For angular 8
+ng build intellisense
+
+cd dist\intellisense
+npm publish
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
