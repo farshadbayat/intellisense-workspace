@@ -19,6 +19,7 @@ After building your library with `ng build intellisense`, go to the dist folder 
 
 Run `ng test intellisense` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Further help
+## Showcase
+![](https://github.com/farshadbayat/intellisense-workspace/blob/Farshad-06132020-Support-Angular8/intellisense-example.gif)
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
