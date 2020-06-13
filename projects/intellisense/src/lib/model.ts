@@ -1,6 +1,6 @@
-export const closeMenuKeyDown = [ 'Escape', 'ArrowLeft', 'ArrowRight'];
+export const CloseMenuKeyDown = [ 'Escape', 'ArrowLeft', 'ArrowRight'];
 
-export interface IntellisenseState {
+export interface IIntellisenseState {
   triggerList: string[];
   currentTrigger?: string;
   items: any[];
@@ -10,8 +10,8 @@ export interface IntellisenseState {
   textAfterCaret?: string;
 }
 
-export interface EventData {
-  sender: IntellisenseState;
+export interface IEventData {
+  sender: IIntellisenseState;
   data: any;
   trigger?: string;
 }
