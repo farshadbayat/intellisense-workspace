@@ -1,6 +1,7 @@
-import { Component, Input, HostBinding, ViewChild } from '@angular/core';
+import { Component, Input, HostBinding, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'intellisense-menu',
   template: `<div #menu class="dropdown-content" [class.dropdown-show-content]="visible">
     <ng-content></ng-content>
@@ -24,10 +25,10 @@ import { Component, Input, HostBinding, ViewChild } from '@angular/core';
   }`]
 })
 export class IntellisenseMenuComponent {
-  @ViewChild('menu') menu;
-  @Input() visible: boolean;
-  @HostBinding('style.left.px') x: number;
-  @HostBinding('style.top.px') y: number;
+  @ViewChild('menu', {static: true}) protected menu: ElementRef;
+  @Input() public visible: boolean;
+  @HostBinding('style.left.px') public x: number;
+  @HostBinding('style.top.px') public y: number;
 
   constructor() {
   }

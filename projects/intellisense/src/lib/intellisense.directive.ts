@@ -1,62 +1,83 @@
-import { Directive, Input, Output, EventEmitter, HostListener, ViewContainerRef, HostBinding, OnChanges, SimpleChanges } from '@angular/core';
-import { EventData, IntellisenseState, closeMenuKeyDown } from './model';
-import { IntellisenseMenuComponent } from './intellisense-menu.component';
-import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import {
+  Directive,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  ViewContainerRef,
+} from '@angular/core';
+import { CloseMenuKeyDown, IEventData, IIntellisenseState } from './model';
 
+import {
+  IntellisenseMenuComponent,
+} from './intellisense-menu.component';
+
+import {
+  DomSanitizer,
+  SafeStyle,
+} from '@angular/platform-browser';
 
 @Directive({
+  // tslint:disable-next-line:directive-selector
   selector: '[intellisense]',
 })
 export class IntellisenseDirective implements OnChanges {
   private maxWidth: number;
   public itemIndex: number;
-  @Output() contentChange = new EventEmitter<any>();
-  @Output() eventCapture = new EventEmitter<EventData>();
-  @Input() splitterChar = [ String.fromCharCode(160) /* &nbsp; */, ' ', '-' , '+', '\\' , '/' , '[', ']' , '{', '}' , '.' , ','];
-  @Input() state?: IntellisenseState = null;
-  @Input() menuRef: IntellisenseMenuComponent;
-  @HostBinding('style') style: SafeStyle;
-  @Input() editable: boolean;
+  @Output() public contentChange = new EventEmitter<any>();
+  @Output() public eventCapture = new EventEmitter<IEventData>();
+  @Input() public splitterChar = [ String.fromCharCode(160) /* &nbsp; */, ' ', '-' , '+', '\\' , '/' , '[', ']' , '{', '}' , '.' , ','];
+  @Input() public state?: IIntellisenseState = null;
+  @Input() public menuRef: IntellisenseMenuComponent;
+  @HostBinding('style') public style: SafeStyle;
+  @Input() public editable: boolean;
 
   constructor(public editor: ViewContainerRef, public sanitizer: DomSanitizer) {
     this.inputStyle();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  public ngOnChanges(changes: SimpleChanges): void {
     if ( changes.editable ) {
       this.editor.element.nativeElement.contentEditable = this.editable;
     }
   }
 
   @HostListener('document:keyup.control.space', ['$event'])
-  onCtrlSpaceKeyup(event: KeyboardEvent) {
+  private onCtrlSpaceKeyup(event: KeyboardEvent) {
     this.initCaret();
     this.showMenu();
   }
 
   @HostListener('input', ['$event'])
-  onInput(event: any) {
+  private onInput(event: any) {
     const e = { Text: this.editor.element.nativeElement.textContent, Html: this.editor.element.nativeElement.innerHTML};
     this.contentChange.emit(e);
   }
 
-  @HostListener('keydown', ['$event']) onKeyDown(event: KeyboardEvent) {
+  @HostListener('keydown', ['$event'])
+  private onKeyDown(event: KeyboardEvent) {
     this.processEvent(event);
   }
 
-  @HostListener('keyup', ['$event']) onKeyUp(event: KeyboardEvent) {
+  @HostListener('keyup', ['$event'])
+  private onKeyUp(event: KeyboardEvent) {
     this.processEvent(event);
   }
 
-  @HostListener('keypress', ['$event']) onKeyPress(event: KeyboardEvent) {
+  @HostListener('keypress', ['$event'])
+  private onKeyPress(event: KeyboardEvent) {
     this.processEvent(event);
   }
 
-  @HostListener('click', ['$event']) onClick(event: any) {
+  @HostListener('click', ['$event'])
+  private onClick(event: any) {
     this.closeMenu();
   }
 
-  inputStyle() {
+  public inputStyle() {
     const styles = [];
     styles.push('border: 1px lightgrey solid');
     styles.push('border-radius: 4px');
@@ -77,7 +98,7 @@ export class IntellisenseDirective implements OnChanges {
     setTimeout(() => this.closeMenu(), 100);
   }
 
-  initCaret() {
+  public initCaret() {
     const caret = this.getCaret();
     if ( caret === null) {
       console.log('This browser does not support intellisense.');
@@ -116,7 +137,7 @@ export class IntellisenseDirective implements OnChanges {
     }
   }
 
-  getCaret( index: number = 0): {Range: Range, Selection: Selection} {
+  private getCaret( index: number = 0): {Range: Range, Selection: Selection} {
     let sel: Selection;
     if (window.getSelection) {
       sel = window.getSelection();
@@ -127,14 +148,14 @@ export class IntellisenseDirective implements OnChanges {
     return null;
   }
 
-  deleteCaret() {
+  private deleteCaret() {
     const caret = this.editor.element.nativeElement.querySelector('#c0');
     if (caret) {
       caret.parentNode.removeChild(caret);
     }
   }
 
-  showMenu() {
+  public showMenu() {
     this.updateMaxVisibleWidth();
     this.updateSearchTrigger(true);
     this.itemIndex = 0;
@@ -142,13 +163,13 @@ export class IntellisenseDirective implements OnChanges {
     this.menuRef.visible = true;
   }
 
-  closeMenu() {
+  public closeMenu() {
     this.deleteCaret();
     this.menuRef.visible = false;
   }
 
   // Extract Search Text & Current Trigger
-  updateSearchTrigger(raiseEvent: boolean = false) {
+  private updateSearchTrigger(raiseEvent: boolean = false) {
     const result = { startNode : null , startOffset : 0, endNode: null , endOffset: 0 };
     const caret = this.getCaret();
     if ( caret === null) {
@@ -167,8 +188,8 @@ export class IntellisenseDirective implements OnChanges {
       result.startNode = element;
       for (let i = 1; i <= textLen; i++) {
         const ch = element.textContent.substring(textLen - i, textLen - i + 1);
-        const isSplit = this.splitterChar.filter( p => p === ch).length > 0 ? true : false;
-        const isTrigger = this.state.triggerList.filter( p => p === ch).length > 0 ? true : false;
+        const isSplit = this.splitterChar.filter( (p) => p === ch).length > 0 ? true : false;
+        const isTrigger = this.state.triggerList.filter( (p) => p === ch).length > 0 ? true : false;
         result.startOffset = textLen - i + 1;
         if (isTrigger === true || isSplit === true) {
           this.state.currentTrigger = isTrigger === true ? ch : null;
@@ -191,7 +212,7 @@ export class IntellisenseDirective implements OnChanges {
       result.endOffset = textLen;
       for (let i = 0; i <= textLen; i++) {
         const ch = element.textContent.substring(i, i + 1);
-        const isSplit = [...this.splitterChar , ...this.state.triggerList].filter( p => p === ch).length > 0 ? true : false;
+        const isSplit = [...this.splitterChar , ...this.state.triggerList].filter( (p) => p === ch).length > 0 ? true : false;
         if (isSplit === true) {
           complated = true;
           result.endOffset = i;
@@ -208,25 +229,25 @@ export class IntellisenseDirective implements OnChanges {
     return result;
   }
 
-  isBlockElement(node: any) {
+  private isBlockElement(node: any) {
     const blockTags = ['TD', 'TH' , 'CAPTION', 'BR'];
     const inlineDisply = ['contents', 'initial' , 'table-cell', 'unset'];
     if ( node.nodeType !== 1) { // if type is not element so blocking false;
       return false;
     }
-    if (blockTags.filter( b => b === node.nodeName).length > 0 ) {
+    if (blockTags.filter( (b) => b === node.nodeName).length > 0 ) {
       return true;
     }
     const compStyles = window.getComputedStyle(node);
     const displyStyle = compStyles.getPropertyValue('display');
-    if (displyStyle.startsWith('inline') || inlineDisply.filter( d => d === displyStyle).length > 0 ) {
+    if (displyStyle.startsWith('inline') || inlineDisply.filter( (d) => d === displyStyle).length > 0 ) {
       return false;
     } else {
       return true;
     }
   }
 
-  updateLocation() {
+  public updateLocation() {
     // const caret = document.getElementById('c0');
     const caret = this.editor.element.nativeElement.querySelector('#c0');
     // const menu = document.getElementById('menu');
@@ -242,7 +263,7 @@ export class IntellisenseDirective implements OnChanges {
   // Importand Node:
   // 1) https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop
   // 2) https://developer.mozilla.org/en-US/docs/Web/API/HTMLelement/offsetParent
-  getTotalOffset(element: HTMLElement) {
+  public getTotalOffset(element: HTMLElement) {
     let top = element.offsetTop;
     let left = element.offsetLeft;
     while ( element.offsetParent !== this.editor.element.nativeElement.offsetParent) {
@@ -253,7 +274,7 @@ export class IntellisenseDirective implements OnChanges {
     return {offsetTop: top, offsetLeft: left};
   }
 
-  getCurrentLineInfo(): any {
+  private getCurrentLineInfo(): any {
     const result = {beforWords: [], beforText: '', afterText: ''};
     const caret = this.getCaret();
     if ( caret === null) {
@@ -284,11 +305,11 @@ export class IntellisenseDirective implements OnChanges {
     // extract all word
     let beforText = result.beforText;
     // insert space befor trigger
-    this.state.triggerList.forEach(t => {
+    this.state.triggerList.forEach((t) => {
       beforText = this.replaceAll(beforText, t, ' ' + t);
     });
     // split normalized
-    this.splitterChar.forEach(s => {
+    this.splitterChar.forEach((s) => {
       beforText = this.replaceAll(beforText, s, ' ');
     });
     beforText = this.replaceAll(beforText, '  ', ' ').trim();
@@ -296,11 +317,11 @@ export class IntellisenseDirective implements OnChanges {
     return result;
   }
 
-  replaceAll(text: string, search: string, replace: string): string {
+  private replaceAll(text: string, search: string, replace: string): string {
     return text.split(search).join(replace);
   }
 
-  injectText(text: string) {
+  public injectText(text: string) {
     const caret = this.getCaret();
     if ( caret === null) {
       console.log('This browser does not support intellisense.');
@@ -338,7 +359,7 @@ export class IntellisenseDirective implements OnChanges {
     }
   }
 
-  updateMaxVisibleWidth(): number {
+  public updateMaxVisibleWidth(): number {
     let parent = this.editor.element.nativeElement;
     while (parent.parentElement) {
       parent = parent.parentElement;
@@ -353,7 +374,7 @@ export class IntellisenseDirective implements OnChanges {
     return this.maxWidth;
   }
 
-  processEvent(e: KeyboardEvent) {
+  private processEvent(e: KeyboardEvent) {
     if (this.state === null) {
       console.warn('[menuData] field is not exist in tag.');
       return;
@@ -372,7 +393,7 @@ export class IntellisenseDirective implements OnChanges {
         preventDefualt = true;
       } else if ( e.type === 'keydown' && e.key === 'ArrowUp' && this.itemIndex > 0) {
         this.itemIndex--;
-      } else if ( e.type === 'keydown' && [...closeMenuKeyDown, ...this.splitterChar].filter( k => k === e.key).length > 0 ) {
+      } else if ( e.type === 'keydown' && [...CloseMenuKeyDown, ...this.splitterChar].filter( (k) => k === e.key).length > 0 ) {
         this.closeMenu();
       } else if ( e.key === 'Backspace') {
         if (this.state.textBeforCaret.length === 0 && this.state.textAfterCaret.length === 0) {
@@ -392,7 +413,7 @@ export class IntellisenseDirective implements OnChanges {
       this.updateLocation();
     }
 
-    if (e.type === 'keyup' && this.state.triggerList.filter( t => t === e.key).length > 0) {
+    if (e.type === 'keyup' && this.state.triggerList.filter( (t) => t === e.key).length > 0) {
       this.deleteCaret();
       this.onCtrlSpaceKeyup(null);
       this.state.currentTrigger = e.key;
@@ -405,7 +426,7 @@ export class IntellisenseDirective implements OnChanges {
     }
   }
 
-  visibleCharachter(e) {
+  public visibleCharachter(e) {
     const charCode = (e.charCode) ? e.charCode : ((e.keyCode) ? e.keyCode : ((e.which) ? e.which : 0));
     if ((charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122) || (charCode >= 48 && charCode <= 57) ) {
       return true;
@@ -414,7 +435,7 @@ export class IntellisenseDirective implements OnChanges {
     }
   }
 
-  menuItemContent(item: any) {
+  private menuItemContent(item: any) {
     if (this.state.fieldName !== null ) {
       return item[this.state.fieldName];
     } else {

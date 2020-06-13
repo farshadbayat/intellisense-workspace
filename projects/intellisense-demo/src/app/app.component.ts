@@ -1,9 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
-import { IntellisenseState, IntellisenseDirective, IntellisenseMenuComponent, EventData } from 'intellisense';
-// import { IntellisenseState, EventData } from './intellisense/model';
-// import { IntellisenseMenuComponent } from './intellisense/intellisense-menu.component';
-// import { IntellisenseDirective } from './intellisense/intellisense.directive';
+import { IIntellisenseState, IEventData, IntellisenseMenuComponent, IntellisenseDirective } from 'intellisense';
 
+const IMAGE_URL = 'https://upload.wikimedia.org/wikipedia/commons/thumb';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -13,37 +11,37 @@ export class AppComponent {
   title = 'intellisense-demo';
   textOutput: string;
   htmlOutput: string;
-  public state: IntellisenseState = {
-    triggerList: ['@', '.'],
+  public state: IIntellisenseState = {
+    fieldName: 'name',
     items: [],
-    fieldName: 'name'
+    triggerList: ['@', '.'],
   };
 
   fruits = [
       {
         name : 'Apple',
-        image : 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Red_Apple.jpg/265px-Red_Apple.jpg',
-        price : 35
+        image : IMAGE_URL + '/1/15/Red_Apple.jpg/265px-Red_Apple.jpg',
+        price : 35,
       },
       {
         name : 'Banana',
-        image : 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Bananas_white_background_DS.jpg/320px-Bananas_white_background_DS.jpg',
-        price : 12
+        image : IMAGE_URL + '/4/44/Bananas_white_background_DS.jpg/320px-Bananas_white_background_DS.jpg',
+        price : 12,
       },
       {
         name : 'Grapes',
-        image : 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Table_grapes_on_white.jpg/320px-Table_grapes_on_white.jpg',
+        image : IMAGE_URL + '/b/bb/Table_grapes_on_white.jpg/320px-Table_grapes_on_white.jpg',
         weight: 0.1,
         price : 45
       },
       {
         name : 'Pineapple',
-        image : 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Pineapple_and_cross_section.jpg/286px-Pineapple_and_cross_section.jpg',
+        image : IMAGE_URL + '/c/cb/Pineapple_and_cross_section.jpg/286px-Pineapple_and_cross_section.jpg',
         price : 200
       }
     ];
-    @ViewChild('menu') menu: IntellisenseMenuComponent;
-    @ViewChild(IntellisenseDirective, { static: false}) intellisense: IntellisenseDirective;
+    @ViewChild('menu', {static: false}) public menu: IntellisenseMenuComponent;
+    @ViewChild(IntellisenseDirective, { static: false}) public intellisense: IntellisenseDirective;
 
   constructor() {
     this.state.items = this.fruits;
@@ -54,11 +52,12 @@ export class AppComponent {
     this.htmlOutput = e.Html;
   }
 
-  input_onEventChange(eventData: EventData) {
+  input_onEventChange(eventData: IEventData) {
     const search = [eventData.sender.textBeforCaret.toLowerCase() , eventData.sender.textAfterCaret.toLowerCase()];
     if (this.state.currentTrigger === '@') {
       this.state.fieldName = 'name';
-      this.state.items = this.fruits.filter( f => f.name.toLowerCase().indexOf(search[0]) >= 0 || f.name.toLowerCase().indexOf(search[1]) >= search[0].length);
+      this.state.items = this.fruits.filter( (f) =>
+      f.name.toLowerCase().indexOf(search[0]) >= 0 || f.name.toLowerCase().indexOf(search[1]) >= search[0].length);
 
     } else if (this.state.currentTrigger === '.') {
       const masterName = eventData.data.beforWords.length >= 1 ? eventData.data.beforWords[eventData.data.beforWords.length - 1] : null;
@@ -66,15 +65,9 @@ export class AppComponent {
       this.state.fieldName = null;
       this.state.items = properties.filter( p => p.indexOf(search[0]) >= 0 || p.indexOf(search[1]) >= search[0].length);
     }
-    console.log(this.state.items);
   }
 
   menuItem_onClick(menu: IntellisenseMenuComponent, i) {
     this.intellisense.item_select(menu, i);
-  }
-
-  test_onClick(e) {
-    console.log(e);
-    console.log(this.intellisense);
   }
 }
